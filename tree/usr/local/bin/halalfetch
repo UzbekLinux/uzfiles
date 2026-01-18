@@ -1,0 +1,27 @@
+#!/bin/bash
+
+NO_FORMAT="\033[0m"
+C_GREEN="\033[38;5;46m"
+
+distro="$(. /etc/os-release && echo "$PRETTY_NAME")"
+user="$(whoami)"
+host="$(cat /etc/hostname)"
+kernel="$(uname -r)"
+uptime="$(uptime -p | sed 's/up //')"
+shell="$SHELL"
+wm="${XDG_CURRENT_DESKTOP:-terminal}"
+pkg_count="$(pacman -Qq 2>/dev/null | wc -l)"
+cpu="$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2 | sed 's/^ //')"
+ram="$(free -h | awk '/Mem:/ {print $3 "/" $2}')"
+
+echo -e "${C_GREEN}  *++++++++++++++*  ${NO_FORMAT}  $user${C_GREEN}@${NO_FORMAT}$host"
+echo -e "${C_GREEN}*=:-::-::-::-::-::=*${NO_FORMAT}"
+echo -e "${C_GREEN}+============.  ===+  kernel:${NO_FORMAT}   $kernel"
+echo -e "${C_GREEN}+===========.  ====+  uptime:${NO_FORMAT}   $uptime"
+echo -e "${C_GREEN}+++++++++++   +++++*  shell:${NO_FORMAT}    $shell"
+echo -e "${C_GREEN}*+++  =+++   ++++++*  wm:${NO_FORMAT}       $wm"
+echo -e "${C_GREEN}*++++  .+   +++++++*  pkgs:${NO_FORMAT}     $pkg_count (pacman)"
+echo -e "${C_GREEN}*+++++     ++++++++*  cpu:${NO_FORMAT}      $cpu"
+echo -e "${C_GREEN}*++++++  =+++++++++*  ram:${NO_FORMAT}      $ram"
+echo -e "${C_GREEN}*++++++++++++++++++*  status:${NO_FORMAT}   HALAL ✔"
+echo -e "${C_GREEN}  *++++++++++++++*    distro:${NO_FORMAT}   $distro"
