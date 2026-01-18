@@ -1,0 +1,47 @@
+#!/bin/bash
+set -e
+
+if [[ $EUID -ne 0 ]]; then
+  echo -e "\e[41mзапусти это от суперпользователя.\e[0m"
+  exit 1
+fi
+
+TMP_DIR=$(mktemp -d)
+REPO="https://github.com/UzbekLinux/uzfiles.git"
+
+echo "загрузка файлов..."
+git clone --depth 1 "$REPO" "$TMP_DIR"
+
+
+echo "файлы скачаны с репо"
+
+TREE_DIR="$TMP_DIR/$COPY_DIR"
+if [[ ! -d "$TREE_DIR" ]]; then
+  echo -e "\e[41mнет папки $COPY_DIR в репо!\e[0m"
+  exit 1
+fi
+
+
+TOTAL=$(find "$TREE_DIR" -type f | wc -l)
+COUNT=0
+
+echo "копируем $COPY_DIR в корень..."
+if mount | grep -q "iso9660"; then
+    echo "запущен в лайвсд и копируем live-tree"
+    cp -rfv "$TMP_DIR/live-tree/"* /
+else
+    echo "установлена система и копируем tree"
+    cp -rfv "$TMP_DIR/tree/"* /
+fi
+
+if [[ -f /tmp/update.sh ]]; then
+  echo "запускаем /tmp/update.sh..."
+  sh /tmp/update.sh
+else
+  echo -e "\e[41m/tmp/update.sh не найден!\e[0m"
+  exit 1
+fi
+
+rm -rf "$TMP_DIR"
+
+echo "готово."
