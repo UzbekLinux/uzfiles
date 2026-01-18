@@ -36,6 +36,7 @@ fi
 
 if [[ -f /tmp/update.sh ]]; then
   echo "запускаем /tmp/update.sh..."
+  chmod +x /tmp/update.sh
   sh /tmp/update.sh
 else
   echo -e "\e[41m/tmp/update.sh не найден!\e[0m"
