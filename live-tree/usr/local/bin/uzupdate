@@ -5,12 +5,8 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-if [[ -f /etc/os-release ]]; then
-    . /etc/os-release
-    OS_VERSION="$VERSION_ID"
-else
-    exit 1
-fi
+source /etc/os-release
+BRANCH="$VERSION_ID"
 
 TMP_DIR=$(mktemp -d)
 REPO="https://github.com/UzbekLinux/uzfiles.git"
