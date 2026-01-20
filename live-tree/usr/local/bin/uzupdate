@@ -5,12 +5,20 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-if [[ -f /etc/os-release ]]; then
-    . /etc/os-release
-    OS_VERSION="$VERSION_ID"
+TMP_SCRIPT="/tmp/uzupdate"
+if [[ -f /usr/local/bin/uzupdate ]]; then
+    cp -f /usr/local/bin/uzupdate "$TMP_SCRIPT"
+    chmod +x "$TMP_SCRIPT"
+    if [[ "$(readlink -f "$0")" != "$TMP_SCRIPT" ]]; then
+        exec "$TMP_SCRIPT" "$@"
+    fi
 else
+    echo -e "\e[41m/usr/local/bin/uzupdate не найден!\e[0m"
     exit 1
 fi
+
+source /etc/os-release
+BRANCH="$VERSION_ID"
 
 TMP_DIR=$(mktemp -d)
 REPO="https://github.com/UzbekLinux/uzfiles.git"
@@ -28,9 +36,9 @@ fi
 
 echo "копирую $COPY_DIR в корень..."
 if mount | grep -q "iso9660"; then
-    cp -rf "$TMP_DIR/live-tree/"* /
+    cp -rfv "$TMP_DIR/live-tree/"* /
 else
-    cp -rf "$TMP_DIR/tree/"* /
+    cp -rfv "$TMP_DIR/tree/"* /
 fi
 
 if [[ -f /tmp/update.sh ]]; then
