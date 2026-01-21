@@ -1,8 +1,8 @@
 NAME="Uzbek Linux"
 PRETTY_NAME="Uzbek Linux"
 ID=uzbek
-VERSION="2026.1"
-VERSION_ID="2026.1"
+VERSION="2026.2"
+VERSION_ID="2026.2"
 HOME_URL="https://huker667.ru/uzbeklinux"
 BUG_REPORT_URL="https://github.com/uzbeklinux"
 LOGO=uzbeklinux-logo
