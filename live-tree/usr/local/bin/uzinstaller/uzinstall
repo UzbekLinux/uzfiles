@@ -4,12 +4,12 @@ import json
 import subprocess
 from pathlib import Path
 
-from PySide6.QtWidgets import (
+from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QMessageBox,
     QStackedWidget, QButtonGroup
 )
-from PySide6.QtCore import QProcess, Slot, Qt
-from PySide6.QtWidgets import QMainWindow
+from PyQt6.QtCore import QProcess, pyqtSlot, Qt
+from PyQt6.QtWidgets import QMainWindow
 
 from start import Ui_MainWindow as StartUI
 from overview import Ui_MainWindow as OverviewUI
@@ -25,7 +25,6 @@ class StartPage(QMainWindow):
         super().__init__()
         self.ui = StartUI()
         self.ui.setupUi(self)
-        self.setWindowFlag(Qt.WindowCloseButtonHint, False)
 
 class OverviewPage(QMainWindow):
     def __init__(self):
@@ -172,7 +171,8 @@ class InstallPage(QMainWindow):
             self.ui.pushButton.setEnabled(True)
             self.ui.pushButton_2.setEnabled(True)
         
-            if exitStatus == QProcess.NormalExit and exitCode == 0:
+            if exitStatus == QProcess.ExitStatus.NormalExit and exitCode == 0:
+            
                 QMessageBox.information(
                     self,
                     "Готово",
