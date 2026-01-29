@@ -26,9 +26,14 @@ REPO="https://github.com/UzbekLinux/uzfiles.git"
 echo "загрузка файлов для версии $BRANCH..."
 git clone --depth 1 --branch "$BRANCH" "$REPO" "$TMP_DIR" || {
     if command -v notify-send >/dev/null 2>&1; then
-        notify-send --urgency=critical \
+        sudo -u huker \
+            DISPLAY=:0 \
+            XDG_RUNTIME_DIR=/run/user/1000 \
+            DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus \
+            notify-send --urgency=critical \
             "Ошибка Uzbek Linux" \
             "произошла ошибка обновления системы! подключись к интернету."
+
     fi
     echo -e "\e[41mпроизошла ошибка обновления системы! подключись к интернету.\e[0m"
     exit 1
