@@ -105,8 +105,11 @@ echo 'Установка UZBEK-APPS...'
 arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm python-pip sudo python"
 echo 'Установка SPM...'
 arch-chroot /mnt /bin/bash -c "curl -s https://zenusus.serv00.net/dl/installSPM.sh | bash"
-echo 'Установка HALAL Eblan софт...'
-PACKAGES=("halalIDE" "320totalsecurity" "eblan-editor" "eblan-music-editor" "eblanoffice")
+arch-chroot /mnt /bin/bash -c "spm add https://raw.githubusercontent.com/lutit/UzbekGramDesktop/refs/heads/uzbekgram/repo.json"
+arch-chroot /mnt /bin/bash -c "spm add https://msh356.ru/spm/"
+
+echo 'Установка HALAL софт...'
+PACKAGES=("halalIDE" "320totalsecurity" "eblan-editor" "eblan-music-editor" "eblanoffice" "uzbekgram-desktop")
 
 for pkg in "${PACKAGES[@]}"; do
     arch-chroot /mnt /bin/bash -c "
@@ -117,10 +120,9 @@ for pkg in "${PACKAGES[@]}"; do
     "
 done
 
-echo 'я хочу вам установить: firefox, kitty'
-
-arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm firefox alacritty mako wlr-randr nano micro pipewire pipewire-pulse"
+arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm firefox alacritty mako wlr-randr nano micro pipewire pipewire-pulse libnotify python-pyqt5 swaybg nwg-drawer nwg-menu jq dhcpcd iw wpa_supplicant"
 arch-chroot /mnt /bin/bash -c "echo '$USER_NAME ALL=(ALL:ALL) ALL' >> /etc/sudoers"
+
 
 echo 'ПРОИЗВОДСТВО HALAL.NET...'
 
@@ -133,7 +135,7 @@ echo "Копирование халяль компонентов из LiveCD..."
 cp -r /etc/systemd/network /mnt/etc/systemd/
 ln -sf /run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 arch-chroot /mnt /bin/bash -c "systemctl enable systemd-resolved"
-arch-chroot /mnt /bin/bash -c "systemctl enable systemd-networkd.service systemd-resolved.service"
+arch-chroot /mnt /bin/bash -c "systemctl disable systemd-networkd.service"ызь
 arch-chroot /mnt /bin/bash -c "systemctl disable dhcpcd"
 arch-chroot /mnt /bin/bash <<'EOF'
 cat > /etc/systemd/resolved.conf <<'EOC'

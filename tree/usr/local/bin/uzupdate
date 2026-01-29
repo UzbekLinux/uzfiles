@@ -24,22 +24,23 @@ TMP_DIR=$(mktemp -d)
 REPO="https://github.com/UzbekLinux/uzfiles.git"
 
 echo "загрузка файлов для версии $BRANCH..."
-git clone --depth 1 --branch "$BRANCH" "$REPO" "$TMP_DIR"
-
+git clone --depth 1 --branch "$BRANCH" "$REPO" "$TMP_DIR" || {
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send --urgency=critical \
+            "Ошибка Uzbek Linux" \
+            "произошла ошибка обновления системы! подключись к интернету."
+    fi
+    echo -e "\e[41mпроизошла ошибка обновления системы! подключись к интернету.\e[0m"
+    exit 1
+}
 echo "файлы скачаны с репо ($BRANCH)"
 
-TREE_DIR="$TMP_DIR/$COPY_DIR"
-if [[ ! -d "$TREE_DIR" ]]; then
-  echo -e "\e[41mнет папки $COPY_DIR в репо!\e[0m"
-  exit 1
-fi
-
-echo "копирую $COPY_DIR в корень..."
-if mount | grep -q "iso9660"; then
+if [[ -d /run/archiso ]]; then
     cp -rfv "$TMP_DIR/live-tree/"* /
 else
     cp -rfv "$TMP_DIR/tree/"* /
 fi
+
 
 if [[ -f /tmp/update.sh ]]; then
     chmod +x /tmp/update.sh
