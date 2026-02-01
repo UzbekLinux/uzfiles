@@ -66,19 +66,19 @@ class UzbekNetwork(QMainWindow):
             return False
 
     def fifo_command(self, command: str, timeout: int = 20) -> str:
-        full = f'echo "{command}" | sudo -S tee {FIFO_IN}'
-        proc = subprocess.Popen(
-            full,
-            shell=True,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
+        cmd = (
+            f'printf "%s\\n" "{self.sudo_password}" | '
+            f'sudo -S sh -c \'echo "{command}" > {FIFO_IN}\''
         )
-        proc.stdin.write(self.sudo_password + "\n")
-        proc.stdin.flush()
-        proc.stdin.close()
-
+    
+        subprocess.run(
+            cmd,
+            shell=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=5,
+        )
+    
         start = time.time()
         while time.time() - start < timeout:
             try:
@@ -86,8 +86,9 @@ class UzbekNetwork(QMainWindow):
                     return f.read().strip()
             except FileNotFoundError:
                 time.sleep(0.2)
-
+    
         raise TimeoutError("timeout")
+    
 
     def setup_logic(self):
         self.ui.radioButton.toggled.connect(self.update_ui_state)
