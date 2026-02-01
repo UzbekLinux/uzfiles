@@ -5,6 +5,7 @@ import time
 
 from PyQt6.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon
 
 from network import Ui_MainWindow
 
