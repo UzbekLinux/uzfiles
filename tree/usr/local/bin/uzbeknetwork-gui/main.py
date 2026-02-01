@@ -70,7 +70,7 @@ class UzbekNetwork(QMainWindow):
             if not iface:
                 QMessageBox.critical(self, "error", "интерфейс не выбран")
                 return
-            cmd = f"interface wake {iface}"
+            cmd = f"interface {iface} wake"
         else:
             iface = self.ui.comboBox.currentText()
             ssid = self.ui.lineEdit_2.text()
@@ -78,7 +78,7 @@ class UzbekNetwork(QMainWindow):
             if not ssid or not pwd:
                 QMessageBox.critical(self, "error", "не всё заполнено")
                 return
-            cmd = f"interface wake {iface} {ssid} {pwd}" if iface else f"interface wake {ssid} {pwd}"
+            cmd = f"interface {iface} wake {ssid} {pwd}"
 
         try:
             output = self.run_command(cmd)
