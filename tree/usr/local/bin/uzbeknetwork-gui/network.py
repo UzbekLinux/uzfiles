@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'designeretYCND.ui'
+## Form generated from reading UI file 'designerGJsvns.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -58,12 +58,6 @@ class Ui_MainWindow(object):
         self.comboBox_2.setFont(font1)
         self.comboBox_2.setCurrentText(u"")
         self.comboBox_2.setPlaceholderText(u"\u0432\u044b\u0431\u0435\u0440\u0438 \u0431\u0435\u0441\u043f\u0440\u043e\u0432\u043e\u0434 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441 Da.")
-        self.comboBox_3 = QComboBox(self.centralwidget)
-        self.comboBox_3.setObjectName(u"comboBox_3")
-        self.comboBox_3.setGeometry(QRect(20, 190, 581, 35))
-        self.comboBox_3.setFont(font1)
-        self.comboBox_3.setCurrentText(u"")
-        self.comboBox_3.setPlaceholderText(u"\u0432\u044b\u0431\u0435\u0440\u0438 SSID")
         self.lineEdit = QLineEdit(self.centralwidget)
         self.lineEdit.setObjectName(u"lineEdit")
         self.lineEdit.setGeometry(QRect(170, 230, 431, 35))
@@ -82,6 +76,12 @@ class Ui_MainWindow(object):
         self.pushButton.setGeometry(QRect(18, 450, 581, 38))
         self.pushButton.setFont(font1)
         self.pushButton.setText(u"\u043f\u0440\u0438\u043c\u0435\u043d\u0438\u0442\u044c \u0438 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0438\u0442\u044c\u0441\u044f")
+        self.lineEdit_2 = QLineEdit(self.centralwidget)
+        self.lineEdit_2.setObjectName(u"lineEdit_2")
+        self.lineEdit_2.setGeometry(QRect(20, 190, 581, 35))
+        self.lineEdit_2.setFont(font1)
+        self.lineEdit_2.setEchoMode(QLineEdit.EchoMode.Normal)
+        self.lineEdit_2.setPlaceholderText(u"\u0438\u043c\u044f ssid")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
