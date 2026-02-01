@@ -23,6 +23,11 @@ class UzbekNetwork(QMainWindow):
         self.setWindowTitle("UzbekНетворк")
         self.setFixedSize(self.size())
 
+        self.setWindowIcon(QIcon("/usr/local/bin/uzbeknetwork-gui/2705.png"))
+        
+        self.setMinimumSize(627, 507)
+        self.setMaximumSize(627, 507)
+        
         self.sudo_password: str | None = None
 
         if not self.ask_sudo_password():
@@ -171,6 +176,7 @@ class UzbekNetwork(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("/usr/local/bin/uzbeknetwork-gui/2705.png"))
     win = UzbekNetwork()
     win.show()
     sys.exit(app.exec())
