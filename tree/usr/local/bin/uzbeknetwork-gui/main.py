@@ -149,22 +149,24 @@ class UzbekNetwork(QMainWindow):
                 QMessageBox.critical(self, "error", "интерфейс не выбран")
                 return
             cmd = f"interface wake {iface}"
-
+    
         else:
             iface = self.ui.comboBox_2.currentText()
             ssid = self.ui.comboBox_3.currentText()
             pwd = self.ui.lineEdit.text()
-
+    
             if not iface or not ssid or not pwd:
                 QMessageBox.critical(self, "error", "не всё заполнено")
                 return
-
+    
             cmd = f"interface wake {iface} {ssid} {pwd}"
-
+    
         try:
-            self.fifo_command(cmd)
+            output = self.fifo_command(cmd)
+            QMessageBox.information(self, "info", output if output else "успешно")
         except TimeoutError:
             QMessageBox.critical(self, "error", "таймаут")
+    
 
 
 def main():
