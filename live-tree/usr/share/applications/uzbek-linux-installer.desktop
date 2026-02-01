@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Uzbek Linux Установщик
+Comment=Установщик Uzbek Linux
+Exec=pkexec /usr/local/bin/uzinstaller/uzinstall
+Icon=/usr/local/bin/uzinstaller/2705.png
+Terminal=false
+Type=Application
+Categories=System;Installer;
+StartupNotify=true
