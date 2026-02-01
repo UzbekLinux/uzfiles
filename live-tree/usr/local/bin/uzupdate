@@ -1,9 +1,28 @@
 #!/bin/bash
 
+if [[ "$1" == "--help" ]]; then
+    echo "uzupdate [--force-installed]"
+    echo
+    echo "  --force-installed    игнорировать проверку на livecd и всегда копировать tree/"
+    exit 0
+fi
+
+
 if [[ $EUID -ne 0 ]]; then
   echo -e "\e[41mзапусти от суперпользователя.\e[0m"
   exit 1
 fi
+
+FORCE_INSTALLED=0
+
+for arg in "$@"; do
+    case "$arg" in
+        --force-installed)
+            FORCE_INSTALLED=1
+            ;;
+    esac
+done
+
 
 TMP_SCRIPT="/tmp/uzupdate"
 if [[ -f /usr/local/bin/uzupdate ]]; then
@@ -26,13 +45,16 @@ REPO="https://github.com/UzbekLinux/uzfiles.git"
 echo "загрузка файлов для версии $BRANCH..."
 git clone --depth 1 --branch "$BRANCH" "$REPO" "$TMP_DIR" || {
     if command -v notify-send >/dev/null 2>&1; then
-        sudo -u huker \
+        USER_NAME=$(logname 2>/dev/null || echo root)
+        USER_ID=$(id -u "$USER_NAME")
+        
+        sudo -u "$USER_NAME" \
             DISPLAY=:0 \
-            XDG_RUNTIME_DIR=/run/user/1000 \
-            DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus \
-            notify-send --urgency=critical \
-            "Ошибка Uzbek Linux" \
-            "произошла ошибка обновления системы! подключись к интернету."
+            XDG_RUNTIME_DIR="/run/user/$USER_ID" \
+            DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$USER_ID/bus" \
+            notify-send --urgency=critical \ 
+                "Ошибка Uzbek Linux" \ 
+                "произошла ошибка обновления системы! подключись к интернету."
 
     fi
     echo -e "\e[41mпроизошла ошибка обновления системы! подключись к интернету.\e[0m"
@@ -40,11 +62,14 @@ git clone --depth 1 --branch "$BRANCH" "$REPO" "$TMP_DIR" || {
 }
 echo "файлы скачаны с репо ($BRANCH)"
 
-if [[ -d /run/archiso ]]; then
+if [[ "$FORCE_INSTALLED" -eq 1 ]]; then
+    cp -rfv "$TMP_DIR/tree/"* /
+elif [[ -d /run/archiso ]]; then
     cp -rfv "$TMP_DIR/live-tree/"* /
 else
     cp -rfv "$TMP_DIR/tree/"* /
 fi
+
 
 
 if [[ -f /tmp/update.sh ]]; then
