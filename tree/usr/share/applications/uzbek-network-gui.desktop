@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Uzbek Нетворк
+Comment=Uzbek Нетворк
+Exec=/usr/local/bin/uzbeknetwork
+Icon=/usr/local/bin/uzbeknetwork-gui/2705.png
+Terminal=false
+Type=Application
+Categories=System;Installer;
+StartupNotify=true
+X-No-PkExec=true
