@@ -129,6 +129,9 @@ class SystemPage(QMainWindow):
             if not self.ui.manual_root_ComboBox.currentText() or not self.ui.manual_boot_comboBox.currentText():
                 return False, "root и efi разделы сами себя не выберут"
 
+        if not self.ui.displayManager_comboBox.currentText() or not self.ui.bootloader_comboBox.currentText():
+            return False, "ты не выбрать бутладер и дм."
+        
         return True, ""
 
     def collect(self):
