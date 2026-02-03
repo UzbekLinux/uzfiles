@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'installxZZzzs.ui'
+## Form generated from reading UI file 'designerrkUESV.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -15,61 +15,67 @@ from PyQt6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PyQt6.QtWidgets import (QApplication, QFrame, QLabel, QMainWindow,
-    QPushButton, QSizePolicy, QTextEdit, QWidget)
+from PyQt6.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton,
+    QSizePolicy, QTextEdit, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(807, 453)
-        MainWindow.setMinimumSize(QSize(807, 453))
-        MainWindow.setMaximumSize(QSize(807, 453))
-        icon = QIcon()
-        icon.addFile(u"/usr/local/bin/uzinstaller/2705.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        MainWindow.setWindowIcon(icon)
+        MainWindow.resize(831, 619)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.label = QLabel(self.centralwidget)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(10, 10, 201, 51))
-        self.label.setPixmap(QPixmap(u"/usr/local/bin/uzinstaller/uzbek_logo.png"))
-        self.label.setScaledContents(True)
+        self.label.setGeometry(QRect(270, 40, 291, 31))
+        font = QFont()
+        font.setFamilies([u"Sans Serif"])
+        font.setPointSize(16)
+        self.label.setFont(font)
+        self.label_6 = QLabel(self.centralwidget)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setGeometry(QRect(30, 110, 771, 21))
+        font1 = QFont()
+        font1.setFamilies([u"Sans Serif"])
+        font1.setPointSize(13)
+        font1.setItalic(True)
+        self.label_6.setFont(font1)
+        self.label_6.setTextFormat(Qt.TextFormat.MarkdownText)
+        self.label_6.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+        self.label_6.setWordWrap(True)
+        self.pushButton_next = QPushButton(self.centralwidget)
+        self.pushButton_next.setObjectName(u"pushButton_next")
+        self.pushButton_next.setGeometry(QRect(180, 540, 231, 27))
+        font2 = QFont()
+        font2.setFamilies([u"Sans Serif"])
+        self.pushButton_next.setFont(font2)
+        icon = QIcon()
+        icon.addFile(u"/usr/local/bin/uzinstaller/2705.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.pushButton_next.setIcon(icon)
+        self.pushButton_reboot = QPushButton(self.centralwidget)
+        self.pushButton_reboot.setObjectName(u"pushButton_reboot")
+        self.pushButton_reboot.setGeometry(QRect(420, 540, 241, 27))
+        self.pushButton_reboot.setFont(font2)
+        self.pushButton_reboot.setIcon(icon)
         self.label_2 = QLabel(self.centralwidget)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(310, 10, 481, 51))
-        font = QFont()
-        font.setPointSize(14)
-        font.setItalic(True)
-        self.label_2.setFont(font)
-        self.label_2.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.label_2.setGeometry(QRect(30, 30, 181, 51))
+        self.label_2.setPixmap(QPixmap(u"/usr/local/bin/uzinstaller/uzbek_logo.png"))
+        self.label_2.setScaledContents(True)
         self.label_3 = QLabel(self.centralwidget)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(30, 70, 751, 21))
-        font1 = QFont()
-        font1.setPointSize(12)
-        self.label_3.setFont(font1)
-        self.textEdit = QTextEdit(self.centralwidget)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setGeometry(QRect(30, 100, 751, 291))
-        font2 = QFont()
-        font2.setFamilies([u"Monospace"])
-        self.textEdit.setFont(font2)
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit.setFrameShadow(QFrame.Shadow.Raised)
-        self.textEdit.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
-        self.textEdit.setReadOnly(True)
-        self.pushButton = QPushButton(self.centralwidget)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setEnabled(False)
-        self.pushButton.setGeometry(QRect(577, 400, 201, 34))
-        self.pushButton.setIcon(icon)
-        self.pushButton.setCheckable(False)
-        self.pushButton_2 = QPushButton(self.centralwidget)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-        self.pushButton_2.setEnabled(False)
-        self.pushButton_2.setGeometry(QRect(370, 400, 201, 34))
-        self.pushButton_2.setIcon(icon)
+        self.label_3.setGeometry(QRect(620, 30, 181, 51))
+        self.label_3.setPixmap(QPixmap(u"/usr/local/bin/uzinstaller/uzbek_logo.png"))
+        self.label_3.setScaledContents(True)
+        self.terminalView = QTextEdit(self.centralwidget)
+        self.terminalView.setObjectName(u"terminalView")
+        self.terminalView.setGeometry(QRect(30, 140, 771, 381))
+        font3 = QFont()
+        font3.setFamilies([u"Monospace"])
+        font3.setPointSize(10)
+        self.terminalView.setFont(font3)
+        self.terminalView.setAutoFillBackground(False)
+        self.terminalView.setReadOnly(True)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -78,19 +84,12 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0430 Uzbek Linux", None))
-        self.label.setText("")
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"What doesn't kill you makes you stronger \u2705 ", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u0441\u043f\u0430\u0441\u0438\u0431\u043e\u2705 \u043c\u044b \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u044c \u0432\u0430\u043c \u0431\u044b\u0441\u0442\u0440\u0430 \u043d\u0430\u0448\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u2705\u2705\u2705", None))
-        self.textEdit.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Monospace'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"\u043f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0441\u043a \u0432 \u0441\u0438\u0441\u0442\u0435\u043c\u0430", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"\u0432\u044b\u0439\u0442\u0438 \u0438\u0437 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u0449\u0438\u043a\u0430", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"\u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0430 Uzbek Linux 2026.2", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u0434\u043e\u0431\u0440\u043e \u043f\u043e\u0436\u0430\u043b\u043e\u0432\u0430\u0442\u044c \u0432 Uzbek Linux 2026.2! \u043e\u0436\u0438\u0434\u0430\u0439\u0442\u0435 \u043f\u043e\u043a\u0430 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0430 \u0437\u0430\u043a\u043e\u043d\u0447\u0438\u0442\u0441\u044f.", None))
+        self.pushButton_next.setText(QCoreApplication.translate("MainWindow", u"\u0432\u044b\u0439\u0442\u0438 \u0438\u0437 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u0449\u0438\u043a\u0430", None))
+        self.pushButton_reboot.setText(QCoreApplication.translate("MainWindow", u"\u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u043a\u043e\u043c\u043f\u044c\u044e\u0442\u0435\u0440", None))
+        self.label_2.setText("")
+        self.label_3.setText("")
     # retranslateUi
 

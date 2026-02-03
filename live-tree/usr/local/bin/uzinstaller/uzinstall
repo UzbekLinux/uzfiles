@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import sys
 import json
 import subprocess
@@ -16,7 +17,7 @@ from PyQt6.QtWidgets import QMainWindow
 
 from start import Ui_MainWindow as StartUI
 from overview import Ui_MainWindow as OverviewUI
-from part import Ui_MainWindow as PartUI
+from system import Ui_MainWindow as SystemUI
 from user import Ui_MainWindow as UserUI
 from install import Ui_MainWindow as InstallUI
 
@@ -35,24 +36,25 @@ class OverviewPage(QMainWindow):
         self.ui = OverviewUI()
         self.ui.setupUi(self)
 
-class PartPage(QMainWindow):
+class SystemPage(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.ui = PartUI()
+        self.ui = SystemUI()
         self.ui.setupUi(self)
 
         self.group = QButtonGroup(self)
-        self.group.addButton(self.ui.radioButton)
-        self.group.addButton(self.ui.radioButton_2)
+        self.group.addButton(self.ui.auto_RadioButton)
+        self.group.addButton(self.ui.manual_RadioButton)
 
         self.load_auto_disks()
         self.load_manual_partitions()
+        self.load_bl_and_dm()
         
-        self.ui.radioButton.toggled.connect(self.update_state)
-        self.ui.radioButton_2.toggled.connect(self.update_state)
-        self.ui.pushButton_2.clicked.connect(self.open_gparted)
+        self.ui.auto_RadioButton.toggled.connect(self.update_state)
+        self.ui.manual_RadioButton.toggled.connect(self.update_state)
+        self.ui.pushButton_next_2.clicked.connect(self.open_gparted)
         
-        self.ui.radioButton.setChecked(True)
+        self.ui.auto_RadioButton.setChecked(True)
         
         self.update_state()
 
@@ -64,14 +66,13 @@ class PartPage(QMainWindow):
         return json.loads(out)["blockdevices"]
 
     def update_state(self):
-        auto = self.ui.radioButton.isChecked()
+        auto = self.ui.auto_RadioButton.isChecked()
 
-        self.ui.label_4.setEnabled(auto)
-        self.ui.comboBox.setEnabled(auto)
+        # self.ui.label_4.setEnabled(auto)
+        self.ui.Auto_Disk_comboBox.setEnabled(auto)
 
         for w in (
-            self.ui.label_5, self.ui.label_6,
-            self.ui.comboBox_2, self.ui.comboBox_3
+            self.ui.manual_root_ComboBox, self.ui.manual_boot_comboBox
         ):
             w.setEnabled(not auto)
 
@@ -79,46 +80,71 @@ class PartPage(QMainWindow):
         subprocess.Popen(["gparted"])
 
     def load_auto_disks(self):
-        self.ui.comboBox.clear()
+        self.ui.Auto_Disk_comboBox.clear()
     
         for dev in self.get_lsblk_names():
             name = dev["name"]
             path = "/dev/" + name
-            self.ui.comboBox.addItem(path, path)
+            self.ui.Auto_Disk_comboBox.addItem(path, path)
 
+    def load_bl_and_dm(self):
+        self.ui.bootloader_comboBox.clear()
+        self.ui.displayManager_comboBox.clear()
+    
+        DISPLAY_MANAGERS = ["LightDM", "SDDM"]
+        BIOS_BOOTLOADERS = ["GRUB"]
+        UEFI_BOOTLOADERS = ["GRUB", "Limine", "rEFInd", "systemd-boot"]
+
+        UEFI = os.path.exists("/sys/firmware/efi")
+
+        if UEFI:
+            for bl in UEFI_BOOTLOADERS:
+                self.ui.bootloader_comboBox.addItem(bl, bl)
+        else:
+            for bl in BIOS_BOOTLOADERS:
+                self.ui.bootloader_comboBox.addItem(bl, bl)
+
+        for dm in DISPLAY_MANAGERS:
+            self.ui.displayManager_comboBox.addItem(dm, dm)
+                
+        
     def load_manual_partitions(self):
-        self.ui.comboBox_2.clear()
-        self.ui.comboBox_3.clear()
+        self.ui.manual_root_ComboBox.clear()
+        self.ui.manual_boot_comboBox.clear()
     
         for dev in self.get_lsblk_names():
             for part in dev.get("children", []):
                 path = "/dev/" + part["name"]
-                self.ui.comboBox_2.addItem(path, path)
-                self.ui.comboBox_3.addItem(path, path)
+                self.ui.manual_root_ComboBox.addItem(path, path)
+                self.ui.manual_boot_comboBox.addItem(path, path)
     
     def validate(self):
         if not self.group.checkedButton():
             return False, "ты не выбрать свой разметка. мы не угадатад."
 
-        if self.ui.radioButton.isChecked():
-            if not self.ui.comboBox.currentText():
+        if self.ui.auto_RadioButton.isChecked():
+            if not self.ui.Auto_Disk_comboBox.currentText():
                 return False, "выбери диск для UzbekPartitions™ сука"
         else:
-            if not self.ui.comboBox_2.currentText() or not self.ui.comboBox_3.currentText():
+            if not self.ui.manual_root_ComboBox.currentText() or not self.ui.manual_boot_comboBox.currentText():
                 return False, "root и efi разделы сами себя не выберут"
 
         return True, ""
 
     def collect(self):
-        if self.ui.radioButton.isChecked():
+        if self.ui.auto_RadioButton.isChecked():
             return {
                 "PART_MODE": "auto",
-                "DISK": self.ui.comboBox.currentText(),
+                "DISK": self.ui.Auto_Disk_comboBox.currentText(),
+                "DM": self.ui.displayManager_comboBox.currentText(),
+                "BOOTLOADER": self.ui.bootloader_comboBox.currentText()
             }
         return {
             "PART_MODE": "manual",
-            "ROOT_PART": self.ui.comboBox_2.currentText(),
-            "EFI_PART": self.ui.comboBox_3.currentText(),
+            "ROOT_PART": self.ui.manual_root_ComboBox.currentText(),
+            "EFI_PART": self.ui.manual_boot_ComboBox.currentText(),
+            "DM": self.ui.displayManager_comboBox.currentText(),
+            "BOOTLOADER": self.ui.bootloader_comboBox.currentText()
         }
 
 
@@ -130,10 +156,10 @@ class UserPage(QMainWindow):
 
     def validate(self):
         fields = [
-            self.ui.lineEdit_2.text(),
-            self.ui.lineEdit_3.text(),
-            self.ui.lineEdit.text(),
-            self.ui.lineEdit_4.text(),
+            self.ui.UserNameEdit.text(),
+            self.ui.HostNameEdit.text(),
+            self.ui.UserPassWordEdit.text(),
+            self.ui.RootPassWordEdit.text(),
         ]
         if not all(fields):
             return False, "Заполни всё. Da, ВСЁ"
@@ -141,12 +167,12 @@ class UserPage(QMainWindow):
 
     def collect(self):
         return {
-            "HOSTNAME": self.ui.lineEdit_2.text(),
-            "USERNAME": self.ui.lineEdit_3.text(),
-            "USER_PASSWORD": self.ui.lineEdit.text(),
-            "ROOT_PASSWORD": self.ui.lineEdit_4.text(),
+            "HOSTNAME": self.ui.HostNameEdit.text(),
+            "USERNAME": self.ui.UserNameEdit.text(),
+            "USER_PASSWORD": self.ui.UserPassWordEdit.text(),
+            "ROOT_PASSWORD": self.ui.RootPassWordEdit.text(),
         }
-
+        
 
 class InstallPage(QMainWindow):
     def __init__(self):
@@ -159,8 +185,8 @@ class InstallPage(QMainWindow):
         self.process.readyReadStandardError.connect(self.read_output)
         self.process.finished.connect(self.finished)
 
-        self.ui.pushButton.clicked.connect(self.reboot)
-        self.ui.pushButton_2.clicked.connect(QApplication.quit)
+        self.ui.pushButton_reboot.clicked.connect(self.reboot)
+        self.ui.pushButton_next.clicked.connect(QApplication.quit)
 
     def start_install(self):
         self.process.start("sh", [INSTALL_SCRIPT])
@@ -168,11 +194,11 @@ class InstallPage(QMainWindow):
     def read_output(self):
         text = self.process.readAllStandardOutput().data().decode()
         text += self.process.readAllStandardError().data().decode()
-        self.ui.textEdit.append(text)
+        self.ui.terminalView.append(text)
 
     def finished(self, exitCode, exitStatus):
-            self.ui.pushButton.setEnabled(True)
-            self.ui.pushButton_2.setEnabled(True)
+            self.ui.pushButton_reboot.setEnabled(True)
+            self.ui.pushButton_next.setEnabled(True)
         
             if exitStatus == QProcess.ExitStatus.NormalExit and exitCode == 0:
             
@@ -204,45 +230,46 @@ class Installer(QMainWindow):
 
         self.setWindowTitle("Установка Uzbek Linux")
         
-        self.setFixedSize(807, 453)
+        self.setFixedSize(831, 619)
         
         self.data = {}
 
         self.start = StartPage()
         self.overview = OverviewPage()
-        self.part = PartPage()
+        self.system = SystemPage()
         self.user = UserPage()
         self.install = InstallPage()
 
         self.start_page = self.start.centralWidget()
         self.overview_page = self.overview.centralWidget()
-        self.part_page = self.part.centralWidget()
+        self.system_page = self.system.centralWidget()
         self.user_page = self.user.centralWidget()
         self.install_page = self.install.centralWidget()
         
         self.stack.addWidget(self.start_page)
         self.stack.addWidget(self.overview_page)
-        self.stack.addWidget(self.part_page)
+        self.stack.addWidget(self.system_page)
         self.stack.addWidget(self.user_page)
         self.stack.addWidget(self.install_page)
 
-        self.start.ui.pushButton.clicked.connect(self.next_from_start)
-        self.overview.ui.pushButton.clicked.connect(self.next_from_overview)
-        self.part.ui.pushButton.clicked.connect(self.next_from_part)
-        self.user.ui.pushButton.clicked.connect(self.next_from_user)
+        self.start.ui.pushButton_next.clicked.connect(self.next_from_start)
+        self.overview.ui.pushButton_next.clicked.connect(self.next_from_overview)
+        self.system.ui.pushButton_next.clicked.connect(self.next_from_system)
+        self.user.ui.pushButton_next.clicked.connect(self.next_from_user)
+        
 
     def next_from_start(self):
         self.stack.setCurrentWidget(self.overview_page)
 
     def next_from_overview(self):
-        self.stack.setCurrentWidget(self.part_page)
+        self.stack.setCurrentWidget(self.system_page)
 
-    def next_from_part(self):
-        ok, msg = self.part.validate()
+    def next_from_system(self):
+        ok, msg = self.system.validate()
         if not ok:
             QMessageBox.warning(self, "Ошибка", msg)
             return
-        self.data.update(self.part.collect())
+        self.data.update(self.system.collect())
         self.stack.setCurrentWidget(self.user_page)
 
     def next_from_user(self):
@@ -258,6 +285,7 @@ class Installer(QMainWindow):
     def write_config(self):
         with open(CONFIG_PATH, "w") as f:
             for k, v in self.data.items():
+                print(k,v)
                 f.write(f'{k}="{v}"\n')
 
 if __name__ == "__main__":
