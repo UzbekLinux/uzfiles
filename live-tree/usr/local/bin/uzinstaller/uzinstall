@@ -183,6 +183,9 @@ class InstallPage(QMainWindow):
         self.ui = InstallUI()
         self.ui.setupUi(self)
 
+        self.ui.pushButton_reboot.setEnabled(False)
+        self.ui.pushButton_next.setEnabled(False)
+        
         self.process = QProcess(self)
         self.process.readyReadStandardOutput.connect(self.read_output)
         self.process.readyReadStandardError.connect(self.read_output)
